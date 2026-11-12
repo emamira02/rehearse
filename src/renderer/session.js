@@ -205,6 +205,14 @@ export class Session extends Emitter {
     this.emit('change');
     await new Promise((r) => setTimeout(r, DRAIN_MS[this.mode] ?? 1000));
     const result = buildRehearsalResult(this.buf, this.startUs, this.stopUs);
+    // derived series for offline analysis (read only through the diagnostics hook; never stored by the app)
+    const t0 = this.startUs, rel = (ts) => Math.round((ts - t0) / 1000) / 1000;
+    const inWin = (arr) => arr.filter((x) => x.ts >= t0 - 5e6 && x.ts <= this.stopUs + 3e6);
+    this.lastSeries = {
+      talking: inWin(this.buf.talking).map((x) => [rel(x.ts), x.detected ? 1 : 0]),
+      pose: inWin(this.buf.pose).map((x) => [rel(x.ts), x.mouth ?? null, x.size ?? null]),
+      chest: inWin(this.buf.chest).map((x) => [rel(x.ts), Math.round(x.v * 1000) / 1000]),
+    };
     await this.close();
     return result;
   }

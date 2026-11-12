@@ -3,6 +3,9 @@
 **Practise a talk in front of your webcam.** Rehearse shows when you spoke, when you paused, and how long you went
 without a pause. It uses no microphone, records nothing, and sends nothing anywhere.
 
+**Demo video (63 s, live SmartSpectra signals, camera preview blurred on purpose):**
+[docs/demo.webm](https://github.com/emamira02/rehearse/raw/main/docs/demo.webm)
+
 Built with the [Presage SmartSpectra SDK](https://smartspectra.presagetech.com/docs/nodejs) for the
 [DEV Presage SmartSpectra SDK Challenge](https://dev.to/challenges/presage-2026-11-04).
 

@@ -17,7 +17,7 @@ const CONSENT_VERSION = 1;
 const MAX_RECORD_BYTES = 4 * 1024 * 1024;
 const MAX_TITLE = 120;
 const ID_RE = /^\d{8}-\d{6}-[a-f0-9]{6}$/;
-const DEFAULT_SETTINGS = Object.freeze({ consentVersion: 0, consentedAt: null, pulseEnabled: false, nudges: true, lastCheck: null });
+const DEFAULT_SETTINGS = Object.freeze({ consentVersion: 0, consentedAt: null, pulseEnabled: false, nudges: true, blurPreview: false, lastCheck: null });
 const MAX_CHECK_BYTES = 8 * 1024;
 
 // numbers, booleans, short strings, null, nested plain objects/arrays only (an accuracy-check summary, no samples)
@@ -113,6 +113,7 @@ function createStore(root) {
     const next = { ...cur };
     if ('pulseEnabled' in patch) next.pulseEnabled = patch.pulseEnabled === true;
     if ('nudges' in patch) next.nudges = patch.nudges !== false;
+    if ('blurPreview' in patch) next.blurPreview = patch.blurPreview === true;
     if ('lastCheck' in patch) {
       const c = patch.lastCheck === null ? null : plainData(patch.lastCheck);
       if (c !== null && Buffer.byteLength(JSON.stringify(c), 'utf8') > MAX_CHECK_BYTES) throw new RangeError('lastCheck too large');

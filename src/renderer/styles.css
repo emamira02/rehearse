@@ -329,3 +329,9 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .verdict.low { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
 .verdict.na { background: var(--surface-2); color: var(--ink-3); }
 .tip { grid-column: 1 / -1; font-size: 13px; color: var(--ink-2); margin: 0; }
+
+/* blurred camera preview (privacy when sharing or recording the screen) */
+.preview.blurred video { filter: blur(22px) saturate(0.8); transform: scaleX(-1) scale(1.12); }
+.preview-toggle { position: absolute; right: 12px; bottom: 12px; padding: 4px 10px; border-radius: 999px; border: 0;
+  background: rgba(0,0,0,.55); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+.preview-toggle:hover { background: rgba(0,0,0,.75); }

@@ -223,7 +223,17 @@ function previewBox() {
   } else {
     const video = h('video', { autoplay: true, muted: true, playsinline: true });
     video.muted = true;
-    box.append(video, h('div', { class: 'preview-label on' }, h('i', { class: 'dot' }), 'Camera on'));
+    // the blur is applied to the on-screen preview only (handy when sharing or recording the screen); the SDK
+    // still receives the normal camera frames
+    const blurred = () => app.cfg.settings.blurPreview === true;
+    box.classList.toggle('blurred', blurred());
+    const blurBtn = h('button', { class: 'preview-toggle', type: 'button' }, blurred() ? 'Show preview' : 'Blur preview');
+    blurBtn.addEventListener('click', async () => {
+      app.cfg = await api.updateSettings({ blurPreview: !blurred() });
+      box.classList.toggle('blurred', blurred());
+      setText(blurBtn, blurred() ? 'Show preview' : 'Blur preview');
+    });
+    box.append(video, h('div', { class: 'preview-label on' }, h('i', { class: 'dot' }), 'Camera on'), blurBtn);
     box.video = video;
     const attach = (st) => { video.srcObject = st || null; if (st) video.play().catch(() => {}); };
     attach(app.session?.stream);
@@ -430,6 +440,7 @@ async function finishingScreen() {
   const result = await session.finish();
   app.lastInsightPackets = session.insightPackets;
   app.lastDiagnostics = session.diagnostics();
+  if (app.cfg.diagnostics) app.lastSeries = session.lastSeries || null;
   app.session = null;
   renderHeader();
   if (!result) return go('home');
@@ -852,7 +863,7 @@ window.addEventListener('keydown', (e) => {
   if (app.cfg.diagnostics) {
     // read-only hook for scripts/e2e-*.cjs; holds no images and no key
     window.__rehearseDiag = () => ({ screen: app.screen, mode: app.cfg.mode, lastInsightPackets: app.lastInsightPackets,
-      session: app.session ? app.session.diagnostics() : null, last: app.lastDiagnostics || null,
+      session: app.session ? app.session.diagnostics() : null, last: app.lastDiagnostics || null, series: app.lastSeries || null,
       check: app.lastCheck ? { summary: app.lastCheck.summary, result: app.lastCheck.result, export: app.lastCheckExport || null } : null });
   }
   go(app.cfg.hasConsent ? 'home' : 'consent');
