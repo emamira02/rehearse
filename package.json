@@ -1,0 +1,27 @@
+{
+  "name": "rehearse",
+  "productName": "Rehearse",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Camera-only presentation rehearsal coach built on the Presage SmartSpectra SDK (no microphone, local only)",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "esbuild src/renderer/app.js --bundle --outfile=dist/renderer.js --platform=browser --format=iife --target=chrome130 --log-level=warning",
+    "start": "npm run build && electron .",
+    "simulate": "npm run build && electron . --simulate",
+    "test": "node --test",
+    "smoke:live": "node scripts/smoke_live.mjs"
+  },
+  "dependencies": {
+    "@smartspectra/node-sdk": "3.5.0"
+  },
+  "devDependencies": {
+    "electron": "43.8.1",
+    "esbuild": "0.28.2"
+  },
+  "main": "electron/main.cjs"
+}

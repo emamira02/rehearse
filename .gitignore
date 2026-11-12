@@ -1,0 +1,11 @@
+node_modules/
+dist/
+results/
+npm_install.log
+.env
+*.log
+# internal working notes (not part of the public repo)
+HANDOFF.md
+PLAN.md
+DEV_POST.md
+VIDEO_E_PUBBLICAZIONE.md
